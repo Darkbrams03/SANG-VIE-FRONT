@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import AdminDash from './pages/AdminDash';
+import AdminDash from './pages/AdminDash.boardjsx';
 import AgentDashboard from './pages/AgentDashboard';
 
 function App() {
