@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* index.css */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-ok   { background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,.5); animation: glow-green 2s ease-in-out infinite; }
+.status-low  { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,.5); animation: glow-amber 2s ease-in-out infinite; }
+.status-crit { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,.5);  animation: glow-red   1s ease-in-out infinite; }
+
+@keyframes glow-green { 0%,100%{box-shadow:0 0 5px rgba(16,185,129,.5)}  50%{box-shadow:0 0 14px rgba(16,185,129,.8)} }
+@keyframes glow-amber { 0%,100%{box-shadow:0 0 5px rgba(245,158,11,.5)} 50%{box-shadow:0 0 14px rgba(245,158,11,.8)} }
+@keyframes glow-red   { 0%,100%{box-shadow:0 0 6px rgba(239,68,68,.5)}  50%{box-shadow:0 0 18px rgba(239,68,68,.8)} }
