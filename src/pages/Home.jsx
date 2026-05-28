@@ -14,7 +14,7 @@ import Footer from '../components/Footer';
 import UrgencyBanner from '../components/UrgencyBanner';
 
 
-const API = 'https://api.allorigins.win/raw?url=http://sang-vie-back.fwh.is/api';
+const API = '/api';
 
 const Home = () => {
   const navigate = useNavigate();

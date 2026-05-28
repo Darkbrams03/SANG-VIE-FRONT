@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API = 'https://api.allorigins.win/raw?url=http://sang-vie-back.fwh.is/api';
+const API = '/api';
 
 const scrollTo = (id) => {
   const el = document.getElementById(id);
