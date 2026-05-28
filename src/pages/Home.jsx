@@ -13,7 +13,8 @@ import LoginModal from '../components/LoginModal';
 import Footer from '../components/Footer';
 import UrgencyBanner from '../components/UrgencyBanner';
 
-const API = 'http://127.0.0.1:8000/api';
+
+const API = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
 const Home = () => {
   const navigate = useNavigate();
