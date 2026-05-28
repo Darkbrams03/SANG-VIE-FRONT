@@ -14,7 +14,7 @@ import Footer from '../components/Footer';
 import UrgencyBanner from '../components/UrgencyBanner';
 
 
-const API = '/api';
+const API = 'https://sang-vie-back-rfmj.onrender.com/api';
 
 const Home = () => {
   const navigate = useNavigate();
