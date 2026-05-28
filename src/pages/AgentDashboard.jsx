@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
+const API = 'http://sang-vie-back.fwh.is/api';
 
 const BLOOD_GROUPS  = ['O−','O+','A−','A+','B−','B+','AB−','AB+'];
 const TYPES_PRODUIT = ['CGR — Globules Rouges','PFC — Plasma Frais Congelé','CPA — Concentré de Plaquettes'];
