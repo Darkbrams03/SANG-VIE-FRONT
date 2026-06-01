@@ -324,7 +324,7 @@ const AdminDash = () => {
   const [loading,     setLoading]     = useState({ stats: true, poches: false, donors: true });
 
   /* ── helpers ── */
-  const token      = () => localStorage.getItem('ACCESS_TOKEN');
+  const token = () => localStorage.getItem('token');
   const authHeader = () => ({ headers: { Authorization: `Bearer ${token()}` } });
  const api = axios.create({ baseURL: 'https://sang-vie-back.onrender.com/api' });
 
@@ -349,13 +349,18 @@ const AdminDash = () => {
 
 
   const fetchDonors = async () => {
-    setLoading(p => ({ ...p, donors: true }));
-    try {
-      const r = await api.get('/donors', authHeader());
-      setDonors(r.data);
-    } catch { console.error('Erreur donneurs'); }
-    finally { setLoading(p => ({ ...p, donors: false })); }
-  };
+  setLoading(p => ({ ...p, donors: true }));
+  try {
+    // Utilise authHeader() qui appelle désormais la bonne clé 'token'
+    const r = await api.get('/donors', authHeader());
+    setDonors(r.data);
+  } catch (err) {
+    console.error("Erreur donneurs:", err.response?.data || err.message);
+  } finally {
+    setLoading(p => ({ ...p, donors: false }));
+  }
+};
+
 
   const fetchPoches = async () => {
     setLoading(p => ({ ...p, poches: true }));
