@@ -74,6 +74,9 @@ const Home = () => {
   };
 
   // ── Connexion agent ──
+// N'oublie pas d'ajouter le hook navigate en haut de ton composant Home :
+// const navigate = useNavigate(); 
+
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
@@ -82,15 +85,17 @@ const handleLogin = async (e) => {
     // 1. Sauvegarde le token
     localStorage.setItem('token', response.data.token);
     
-    // 2. Redirige vers le dashboard selon le rôle (si ton API renvoie le rôle)
-    // Sinon, envoie simplement vers /dashboard
-    navigate('/dashboard'); 
+    // 2. Redirige selon le rôle retourné par l'API
+    const userRole = response.data.user.role; // 'admin' ou 'agent'
     
-    // Optionnel : ferme la modal
-    setIsModalOpen(false);
-    
+    if (userRole === 'admin') {
+      navigate('/admin');
+    } else {
+      navigate('/agent');
+    }
+
   } catch (error) {
-    console.error("Erreur :", error.response?.data);
+    console.error("Erreur de connexion :", error.response?.data);
     alert("Matricule ou mot de passe incorrect.");
   }
 };
