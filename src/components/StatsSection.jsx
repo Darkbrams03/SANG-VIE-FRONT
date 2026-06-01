@@ -1,10 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const API = 'https://sang-vie-back-rfmj.onrender.com/api';
 
 const StatsSection = () => {
   const [stats, setStats] = useState(null);
+
+  // Initialisation ou rafraîchissement d'AOS pour recalculer les positions après l'injection des données
+  useEffect(() => {
+    AOS.refresh();
+  }, [stats]);
 
   useEffect(() => {
     axios.get(`${API}/stats-globales`)
@@ -25,7 +34,11 @@ const StatsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
 
         {/* Card rouge principale */}
-        <div className="md:col-span-1 bg-red-700 rounded-2xl p-7 flex flex-col justify-between text-white shadow-xl shadow-red-900/20">
+        {/* 🔥 Glissement depuis la gauche pour la carte d'ancrage */}
+        <div 
+          data-aos="fade-right"
+          className="md:col-span-1 bg-red-700 rounded-2xl p-7 flex flex-col justify-between text-white shadow-xl shadow-red-900/20"
+        >
           <div>
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-red-200 mb-1">
               Tableau de bord
@@ -51,7 +64,12 @@ const StatsSection = () => {
         <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-5">
 
           {/* Stock total */}
-          <div className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all">
+          {/* 🔥 Apparition par le bas avec 150ms de délai */}
+          <div 
+            data-aos="fade-up"
+            data-aos-delay="150"
+            className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all"
+          >
             <div>
               <span className="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">
                 Stock total
@@ -70,7 +88,12 @@ const StatsSection = () => {
           </div>
 
           {/* Groupes critiques */}
-          <div className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all">
+          {/* 🔥 Apparition par le bas avec 300ms de délai */}
+          <div 
+            data-aos="fade-up"
+            data-aos-delay="300"
+            className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all"
+          >
             <div>
               <span className="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">
                 Besoins critiques
@@ -91,7 +114,12 @@ const StatsSection = () => {
           </div>
 
           {/* Donneurs */}
-          <div className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all">
+          {/* 🔥 Apparition par le bas avec 450ms de délai */}
+          <div 
+            data-aos="fade-up"
+            data-aos-delay="450"
+            className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all"
+          >
             <div>
               <span className="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">
                 Donneurs actifs

@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/vite": "^4.2.1",
+    "aos": "^2.3.4",
     "axios": "^1.13.6",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.577.0",

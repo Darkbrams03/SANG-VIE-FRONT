@@ -1,3 +1,9 @@
+import { useEffect } from 'react';
+
+// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const scrollTo = (id) => {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -25,12 +31,19 @@ const STEPS = [
 ];
 
 const ProcessSection = () => {
+  
+  // Garantir que les coordonnées d'AOS sont recalculées si nécessaire au chargement du composant
+  useEffect(() => {
+    AOS.refresh();
+  }, []);
+
   return (
     <section id="comment-donner" className="bg-slate-900 py-20 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Header ── */}
-        <div className="mb-14">
+        {/* 🔥 Glissement vers le haut de l'en-tête */}
+        <div className="mb-14" data-aos="fade-up">
           <p className="text-[10px] font-black uppercase tracking-[.2em] text-red-400 mb-3">
             Processus de don
           </p>
@@ -49,8 +62,14 @@ const ProcessSection = () => {
 
         {/* ── Steps ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {STEPS.map(({ num, icon, title, desc }) => (
-            <div key={num} className="relative pt-8 group">
+          {STEPS.map(({ num, icon, title, desc }, index) => (
+            // 🔥 Chaque étape glisse depuis la gauche avec un retard cumulé (0ms, 200ms, 400ms) pour l'effet chronologique
+            <div 
+              key={num} 
+              className="relative pt-8 group"
+              data-aos="fade-right"
+              data-aos-delay={index * 200}
+            >
               {/* Numéro décoratif */}
               <span
                 className="absolute top-0 -left-1 text-[5rem] font-black leading-none pointer-events-none select-none text-white/[.04] group-hover:text-red-700/20 transition-colors duration-300"
@@ -74,7 +93,13 @@ const ProcessSection = () => {
         </div>
 
         {/* ── CTA Banner ── */}
-        <div className="mt-16 p-px rounded-3xl" style={{ background: 'linear-gradient(to right, #9d0208, #f97316)' }}>
+        {/* 🔥 Le bandeau final surgit avec un zoom fluide dès que le reste est apparu */}
+        <div 
+          className="mt-16 p-px rounded-3xl" 
+          style={{ background: 'linear-gradient(to right, #9d0208, #f97316)' }}
+          data-aos="zoom-in"
+          data-aos-delay="600"
+        >
           <div className="bg-slate-900 rounded-[calc(1.5rem-1px)] p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="font-bold text-xl">Prêt à faire la différence ?</h3>

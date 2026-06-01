@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const LoginModal = ({
   isOpen,
@@ -7,20 +7,20 @@ const LoginModal = ({
   setLoginData,
   handleLogin,
 }) => {
-  // Fermer avec Escape + bloquer le scroll body
+  const [animate, setAnimate] = useState(false);
+
+  // Gérer uniquement le déclenchement de l'animation d'apparition
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     if (isOpen) {
-      document.addEventListener('keydown', onKey);
+      // Un micro-délai pour s'assurer que le DOM a injecté la modale avant de lancer la transition
+      const timer = setTimeout(() => setAnimate(true), 20);
       document.body.style.overflow = 'hidden';
+      return () => clearTimeout(timer);
     } else {
+      setAnimate(false);
       document.body.style.overflow = 'auto';
     }
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -38,13 +38,23 @@ const LoginModal = ({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
 
       {/* ── Overlay ── */}
+      {/* Animation fluide de l'opacité à l'apparition */}
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+          animate ? 'opacity-100' : 'opacity-0'
+        }`}
         onClick={onClose}
       />
 
       {/* ── Modal box ── */}
-      <div className="relative w-full max-w-md bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-8 border border-white/10 shadow-2xl z-10">
+      {/* Animation fluide combinée de l'opacité, de l'échelle (scale) et d'une légère montée (translate-y) */}
+      <div 
+        className={`relative w-full max-w-md bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-8 border border-white/10 shadow-2xl z-10 transition-all duration-300 ease-out ${
+          animate 
+            ? 'opacity-100 scale-100 translate-y-0' 
+            : 'opacity-0 scale-95 translate-y-4'
+        }`}
+      >
 
         {/* Bouton fermer */}
         <button
@@ -102,10 +112,6 @@ const LoginModal = ({
               autoComplete="current-password"
             />
           </div>
-
-          
-            
-            
 
           {/* Submit */}
           <button

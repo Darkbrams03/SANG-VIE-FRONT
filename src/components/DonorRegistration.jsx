@@ -1,6 +1,10 @@
+import { useEffect } from 'react';
+
+// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const BLOOD_GROUPS = ['A+', 'A−', 'B+', 'B−', 'O+', 'O−', 'AB+', 'AB−', 'Inconnu'];
-
-
 
 const FEATURES = [
   {
@@ -31,6 +35,12 @@ const DonorRegistration = ({
   handleSubmit,
   isSubmitted,
 }) => {
+  
+  // S'assurer que le positionnement d'AOS reste précis lors du rendu du composant
+  useEffect(() => {
+    AOS.refresh();
+  }, [isSubmitted]);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -56,7 +66,8 @@ const DonorRegistration = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* ── Texte gauche ── */}
-          <div className="text-white space-y-6">
+          {/* 🔥 Glissement depuis la gauche pour le bloc textuel explicatif */}
+          <div className="text-white space-y-6" data-aos="fade-right">
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-red-200">
               Rejoindre le réseau
             </p>
@@ -96,9 +107,13 @@ const DonorRegistration = ({
             </div>
           </div>
 
-          {/* ── Formulaire ── */}
-          <div className="bg-white/10 backdrop-blur-3xl rounded-3xl p-8 border border-white/20 shadow-2xl">
-
+          {/* ── Formulaire ou bloc succès ── */}
+          {/* 🔥 Glissement depuis la droite avec un léger retard pour équilibrer la mise en page */}
+          <div 
+            data-aos="fade-left"
+            data-aos-delay="200"
+            className="bg-white/10 backdrop-blur-3xl rounded-3xl p-8 border border-white/20 shadow-2xl"
+          >
             {!isSubmitted ? (
               <>
                 <h3 className="font-black text-white text-lg mb-6">

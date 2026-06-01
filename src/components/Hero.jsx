@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 
+// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 // Images dans /public — référencées par URL directe (Vite + dossier public)
 const SLIDES = [
   { src: '/assets/I1.jpg', alt: 'Don de sang au CNHU' },
@@ -21,6 +25,11 @@ const Hero = () => {
       setCurrent((prev) => (prev + 1) % SLIDES.length);
     }, 5000);
     return () => clearInterval(timer);
+  }, []);
+
+  // S'assurer que le positionnement d'AOS est synchronisé au montage
+  useEffect(() => {
+    AOS.refresh();
   }, []);
 
   return (
@@ -54,14 +63,23 @@ const Hero = () => {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center">
 
         {/* Badge institution */}
-        <div className="mb-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 text-white text-xs font-bold">
+        {/* 🔥 Descente en douceur depuis le haut */}
+        <div 
+          data-aos="fade-down"
+          data-aos-duration="800"
+          className="mb-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 text-white text-xs font-bold"
+        >
           <i className="fa-solid fa-hospital text-red-300" />
           CNHU-HKM · Centre National Hospitalier Universitaire
         </div>
 
         <div className="max-w-3xl space-y-6">
           {/* Titre */}
+          {/* 🔥 Montée percutante avec un léger délai pour laisser le badge s'installer */}
           <h1
+            data-aos="fade-up"
+            data-aos-delay="200"
+            data-aos-duration="1000"
             className="text-6xl md:text-8xl font-black text-white leading-[1.05] tracking-tighter uppercase"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
@@ -78,14 +96,26 @@ const Hero = () => {
           </h1>
 
           {/* Sous-titre */}
-          <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light">
+          {/* 🔥 Apparition fluide après le titre principal */}
+          <p 
+            data-aos="fade-up"
+            data-aos-delay="400"
+            data-aos-duration="1000"
+            className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light"
+          >
             Plateforme officielle de monitoring des stocks de sang du{' '}
             <strong className="text-white font-semibold">CNHU-HKM de Cotonou</strong>.
             Consultez la disponibilité en temps réel et rejoignez le réseau des donneurs bénévoles.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap justify-center gap-4 pt-2">
+          {/* 🔥 Les boutons apparaissent en dernier pour inviter à l'action finale */}
+          <div 
+            data-aos="fade-up"
+            data-aos-delay="600"
+            data-aos-duration="1000"
+            className="flex flex-wrap justify-center gap-4 pt-2"
+          >
             <button
               onClick={() => scrollTo('stocks')}
               className="bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm hover:scale-105 transition-all flex items-center gap-2 shadow-xl"
@@ -105,7 +135,6 @@ const Hero = () => {
           </div>
         </div>
 
-       
       </div>
     </section>
   );

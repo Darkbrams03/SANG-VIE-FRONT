@@ -80,22 +80,23 @@ const Navbar = ({ onOpenLogin }) => {
             </div>
 
             {/* ── CTAs desktop ── */}
-            <div className="hidden md:flex items-center gap-3">
-              <button
-                onClick={() => handleNavClick('devenir-donneur')}
-                className="text-red-700 border border-red-200 bg-red-50 hover:bg-red-100 px-5 py-2 rounded-xl text-xs font-bold transition"
-              >
-                <i className="fa-solid fa-heart-pulse mr-1.5" />
-                Devenir Donneur
-              </button>
-              <button
-                onClick={onOpenLogin}
-                className="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-slate-800 transition"
-              >
-                <i className="fa-solid fa-user-shield mr-1.5" />
-                Espace Agent ANTS
-              </button>
-            </div>
+              <div className="hidden md:flex items-center gap-3">
+                <button
+                  onClick={() => handleNavClick('devenir-donneur')}
+                  className="text-red-700 border border-red-200 bg-red-50 hover:bg-red-100 px-5 py-2 rounded-xl text-xs font-semibold transition tracking-wide"
+                >
+                  <i className="fa-solid fa-heart-pulse mr-1.5" />
+                  Devenir Donneur
+                </button>
+                
+                <button
+                  onClick={onOpenLogin}
+                  className="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-slate-800 transition tracking-wide"
+                >
+                  <i className="fa-solid fa-user-shield mr-1.5" />
+                  Espace Agent ANTS
+                </button>
+              </div>
 
             {/* ── Burger mobile ── */}
             <button

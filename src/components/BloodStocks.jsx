@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const API = 'https://sang-vie-back-rfmj.onrender.com/api';
 
 const scrollTo = (id) => {
@@ -8,55 +12,59 @@ const scrollTo = (id) => {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-const GROUPE_ORDER = ['A+','A−','B+','B−','AB+','AB−','O+','O−'];
+const GROUPE_ORDER = ['A+', 'A−', 'B+', 'B−', 'AB+', 'AB−', 'O+', 'O−'];
 
 const toDisplay = (g) => g?.replace('-', '−') ?? g;
 
 const getStatus = (count) => {
   if (count === 0 || count <= 4) return 'crit';
-  if (count <= 15)               return 'low';
+  if (count <= 15) return 'low';
   return 'ok';
 };
 
 const STATUS_CONFIG = {
   ok: {
-    badge:    'bg-emerald-500 text-white',
-    label:    'DISPONIBLE',
-    dot:      'bg-emerald-500 shadow-[0_0_8px_#10b98188]',
+    badge: 'bg-emerald-500 text-white',
+    label: 'DISPONIBLE',
+    dot: 'bg-emerald-500 shadow-[0_0_8px_#10b98188]',
     subLabel: 'Niveau suffisant',
     subColor: 'text-white/60',
-    card:     'bg-white/[.06] border-white/10',
-    btn:      'bg-white/10 hover:bg-white/20',
-    btnIcon:  'fa-share-nodes',
+    card: 'bg-white/[.06] border-white/10',
+    btn: 'bg-white/10 hover:bg-white/20',
+    btnIcon: 'fa-share-nodes',
   },
   low: {
-    badge:    'bg-amber-500 text-white',
-    label:    'LIMITÉ',
-    dot:      'bg-amber-500 shadow-[0_0_8px_#f59e0b88]',
+    badge: 'bg-amber-500 text-white',
+    label: 'LIMITÉ',
+    dot: 'bg-amber-500 shadow-[0_0_8px_#f59e0b88]',
     subLabel: 'Stock bas',
     subColor: 'text-white/60',
-    card:     'bg-white/[.06] border-white/10',
-    btn:      'bg-amber-500 hover:bg-amber-400',
-    btnIcon:  'fa-plus',
+    card: 'bg-white/[.06] border-white/10',
+    btn: 'bg-amber-500 hover:bg-amber-400',
+    btnIcon: 'fa-plus',
   },
   crit: {
-    badge:    'bg-red-500 text-white animate-pulse',
-    label:    'CRITIQUE',
-    dot:      'bg-red-500 shadow-[0_0_8px_#ef444488] animate-pulse',
+    badge: 'bg-red-500 text-white animate-pulse',
+    label: 'CRITIQUE',
+    dot: 'bg-red-500 shadow-[0_0_8px_#ef444488] animate-pulse',
     subLabel: 'Don urgent requis',
     subColor: 'text-red-300',
-    card:     'border-red-500/60 border-2',
-    btn:      'bg-red-500 hover:bg-red-400 shadow-lg',
-    btnIcon:  'fa-bell',
+    card: 'border-red-500/60 border-2',
+    btn: 'bg-red-500 hover:bg-red-400 shadow-lg',
+    btnIcon: 'fa-bell',
   },
 };
 
-const BloodCard = ({ group, status }) => {
+// 🔥 Ajout de la prop index pour gérer le décalage de l'animation
+const BloodCard = ({ group, status, index }) => {
   const cfg = STATUS_CONFIG[status];
   const isCrit = status === 'crit';
 
   return (
     <div
+      // Chaque carte aura un retard proportionnel à sa position (0ms, 50ms, 100ms, etc.)
+      data-aos="fade-up"
+      data-aos-delay={index * 50}
       className={`rounded-[2rem] p-5 border transition-all hover:-translate-y-1 hover:shadow-2xl duration-300 cursor-default ${cfg.card}`}
       style={isCrit ? { background: 'rgba(239,68,68,.08)' } : {}}
     >
@@ -95,29 +103,31 @@ const BloodCard = ({ group, status }) => {
 };
 
 const BloodStocks = () => {
-  const [filter, setFilter]   = useState('all');
-  const [stocks, setStocks]   = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [stocks, setStocks] = useState([]);
   const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-  axios.get(`${API}/stats-globales`)
-    .then(res => {
-      // groupes_critiques est un tableau [{groupe, total}]
-      // On construit une heatmap compatible avec BloodCard
-      const heatmap = GROUPE_ORDER.map(g => {
-        const apiKey = g.replace('−', '-'); // 'O−' → 'O-'
-        const found  = res.data.groupes_critiques?.find(x => x.groupe === apiKey);
-        const count  = found?.total ?? 20; // fallback si groupe absent = stock OK
-        return { group: g, count, status: getStatus(count) };
-      });
-      setStocks(heatmap);
-    })
-    .catch(() => {
-      // Fallback visuel si API indispo
-      setStocks(GROUPE_ORDER.map(g => ({ group: g, status: 'ok', count: 20 })));
-    })
-    .finally(() => setLoading(false));
-}, []);
+  // Initialisation ou rafraîchissement global d'AOS pour recalculer l'emplacement des éléments après le fetch
+  useEffect(() => {
+    AOS.refresh();
+  }, [stocks]);
+
+  useEffect(() => {
+    axios.get(`${API}/stats-globales`)
+      .then(res => {
+        const heatmap = GROUPE_ORDER.map(g => {
+          const apiKey = g.replace('−', '-');
+          const found = res.data.groupes_critiques?.find(x => x.groupe === apiKey);
+          const count = found?.total ?? 20;
+          return { group: g, count, status: getStatus(count) };
+        });
+        setStocks(heatmap);
+      })
+      .catch(() => {
+        setStocks(GROUPE_ORDER.map(g => ({ group: g, status: 'ok', count: 20 })));
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const ordered = GROUPE_ORDER.map(g => {
     const found = stocks.find(s =>
@@ -125,8 +135,8 @@ const BloodStocks = () => {
     );
     if (found) {
       return {
-        group:  toDisplay(found.group),
-        count:  found.count ?? 0,
+        group: toDisplay(found.group),
+        count: found.count ?? 0,
         status: getStatus(found.count ?? 0),
       };
     }
@@ -146,7 +156,8 @@ const BloodStocks = () => {
 
         {/* Header + filtres */}
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
+          {/* Animation de glissement vers le haut pour le titre de la section */}
+          <div data-aos="fade-up">
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-slate-500 mb-2">
               CNHU-HKM · Cotonou
             </p>
@@ -160,7 +171,8 @@ const BloodStocks = () => {
             </p>
           </div>
 
-          <div className="flex gap-2 shrink-0 flex-wrap">
+          {/*  Animation de Zoom progressif sur les boutons de filtres */}
+          <div className="flex gap-2 shrink-0 flex-wrap" data-aos="zoom-in" data-aos-delay="200">
             {[
               { key: 'all', label: 'Tous' },
               { key: 'pos', label: 'Rhésus (+)' },
@@ -177,7 +189,8 @@ const BloodStocks = () => {
         </div>
 
         {/* Légende */}
-        <div className="flex flex-wrap gap-5 mb-8 text-xs font-bold text-slate-400">
+        {/*  L'apparition de la légende suit en s'affichant en douceur */}
+        <div className="flex flex-wrap gap-5 mb-8 text-xs font-bold text-slate-400" data-aos="fade-up" data-aos-delay="100">
           <span className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b98188] inline-block" />
             DISPONIBLE — stock suffisant
@@ -199,14 +212,16 @@ const BloodStocks = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-            {filtered.map((b) => (
-              <BloodCard key={b.group} group={b.group} status={b.status} />
+            {/* Injection de l'index dans la BloodCard pour cadencer l'effet de cascade au scroll */}
+            {filtered.map((b, index) => (
+              <BloodCard key={b.group} group={b.group} status={b.status} index={index} />
             ))}
           </div>
         )}
 
-        {/* Note */}
-        <div className="mt-8 p-5 bg-white/5 border border-white/10 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-4">
+        {/* Note de pied de section */}
+        {/*  Apparaît par le bas avec une durée légèrement supérieure */}
+        <div data-aos="fade-up" data-aos-duration="1200" className="mt-8 p-5 bg-white/5 border border-white/10 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-4">
           <div className="w-9 h-9 shrink-0 bg-blue-500/20 rounded-xl flex items-center justify-center">
             <i className="fa-solid fa-circle-info text-blue-300 text-sm" />
           </div>
