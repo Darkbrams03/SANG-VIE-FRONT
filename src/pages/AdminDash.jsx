@@ -333,6 +333,8 @@ const AdminDash = () => {
     setTimeout(() => setNotif({ show: false, message: '', type: '' }), 3000);
   };
 
+
+ 
   /* ── fetch ── */
  const fetchStats = async () => {
   setLoading(prev => ({ ...prev, stats: true }));
@@ -372,17 +374,16 @@ const AdminDash = () => {
   };
 
   /* ── actions ── */
-  const handlePublishAlert = async () => {
-    if (!alertCfg.besoin) { notify('Veuillez entrer une quantité de poches.', 'error'); return; }
+const handlePublishAlert = async () => {
+    if (!alertCfg.besoin) { notify('Veuillez entrer une quantité.', 'error'); return; }
     try {
       await api.post('/admin/publish-alert', {
-        group:           alertCfg.groupe.split(' ')[0], // 'O−' → 'O-' via Laravel
-        needed_pockets:  alertCfg.besoin,
-        location:        'CNHU-HKM (COTONOU)',
+        group: alertCfg.groupe.split(' ')[0],
+        needed_pockets: alertCfg.besoin,
+        location: 'CNHU-HKM (COTONOU)',
       }, authHeader());
       setShowVisuel(true);
-      notify('Alerte de crise publiée avec succès.');
-      fetchStats();
+      notify('Alerte de crise publiée !');
     } catch { notify('Erreur lors de la publication.', 'error'); }
   };
 
@@ -391,9 +392,21 @@ const AdminDash = () => {
       await api.post('/admin/publish-alert', { stop: true }, authHeader());
       setShowVisuel(false);
       notify('Alerte retirée.');
-      fetchStats();
     } catch { notify('Erreur lors de la désactivation.', 'error'); }
   };
+
+  useEffect(() => {
+    const checkActiveAlert = async () => {
+      try {
+        const res = await api.get('/admin/active-alert', authHeader());
+        if (res.data) {
+          setShowVisuel(true);
+          setAlertCfg({ groupe: res.data.group, besoin: res.data.needed_pockets });
+        }
+      } catch {}
+    };
+    checkActiveAlert();
+  }, []);
 
   const handleDestroyPoche = async (id) => {
     try {
@@ -477,6 +490,16 @@ const AdminDash = () => {
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2)
     : 'AG';
 
+
+    const downloadPoster = () => {
+  if (!posterRef.current) return;
+  html2canvas(posterRef.current).then(canvas => {
+    const a = document.createElement('a');
+    a.download = `ALERTE-SANG-${alertCfg.groupe.split(' ')[0]}.png`;
+    a.href = canvas.toDataURL();
+    a.click();
+  });
+};
 
   return (
     <>
@@ -822,11 +845,11 @@ const AdminDash = () => {
                     <button style={{ background:'#25D366', color:'#fff', border:'none', borderRadius:'.75rem', padding:'.75rem 1.5rem', fontSize:'.72rem', fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:'.5rem' }}
                       onMouseEnter={e => e.currentTarget.style.opacity='.85'}
                       onMouseLeave={e => e.currentTarget.style.opacity='1'}
-                    >📱 Partager WhatsApp</button>
+                    > Partager WhatsApp</button>
                     <button style={{ background:'#1877F2', color:'#fff', border:'none', borderRadius:'.75rem', padding:'.75rem 1.5rem', fontSize:'.72rem', fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:'.5rem' }}
                       onMouseEnter={e => e.currentTarget.style.opacity='.85'}
                       onMouseLeave={e => e.currentTarget.style.opacity='1'}
-                    >📘 Publier Facebook</button>
+                    >Publier Facebook</button>
                     <Btn variant="ghost" onClick={downloadPoster} style={{ fontSize:'.72rem' }}>⬇ Télécharger</Btn>
                   </div>
                 </div>
