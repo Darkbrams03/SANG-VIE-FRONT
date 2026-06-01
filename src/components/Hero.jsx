@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+// 🔥 CONFIGURATION AOS POUR LES ANIMATIONS
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -25,11 +25,6 @@ const Hero = () => {
       setCurrent((prev) => (prev + 1) % SLIDES.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
-
-  // S'assurer que le positionnement d'AOS est synchronisé au montage
-  useEffect(() => {
-    AOS.refresh();
   }, []);
 
   return (
@@ -63,11 +58,11 @@ const Hero = () => {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center text-center">
 
         {/* Badge institution */}
-        {/* 🔥 Descente en douceur depuis le haut */}
+        {/* 🔥 Surgissement initial */}
         <div 
-          data-aos="fade-down"
-          data-aos-duration="800"
           className="mb-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 text-white text-xs font-bold"
+          data-aos="fade-up"
+          data-aos-delay="100"
         >
           <i className="fa-solid fa-hospital text-red-300" />
           CNHU-HKM · Centre National Hospitalier Universitaire
@@ -75,13 +70,12 @@ const Hero = () => {
 
         <div className="max-w-3xl space-y-6">
           {/* Titre */}
-          {/* 🔥 Montée percutante avec un léger délai pour laisser le badge s'installer */}
+          {/* 🔥 Surgissement avec léger décalage */}
           <h1
-            data-aos="fade-up"
-            data-aos-delay="200"
-            data-aos-duration="1000"
             className="text-6xl md:text-8xl font-black text-white leading-[1.05] tracking-tighter uppercase"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
+            data-aos="fade-up"
+            data-aos-delay="250"
           >
             Une poche.
             <br />
@@ -96,12 +90,11 @@ const Hero = () => {
           </h1>
 
           {/* Sous-titre */}
-          {/* 🔥 Apparition fluide après le titre principal */}
+          {/* 🔥 Surgissement de la description */}
           <p 
+            className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light"
             data-aos="fade-up"
             data-aos-delay="400"
-            data-aos-duration="1000"
-            className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light"
           >
             Plateforme officielle de monitoring des stocks de sang du{' '}
             <strong className="text-white font-semibold">CNHU-HKM de Cotonou</strong>.
@@ -109,16 +102,15 @@ const Hero = () => {
           </p>
 
           {/* CTAs */}
-          {/* 🔥 Les boutons apparaissent en dernier pour inviter à l'action finale */}
+          {/* 🔥 Révélation finale des boutons d'actions */}
           <div 
-            data-aos="fade-up"
-            data-aos-delay="600"
-            data-aos-duration="1000"
             className="flex flex-wrap justify-center gap-4 pt-2"
+            data-aos="fade-up"
+            data-aos-delay="550"
           >
             <button
               onClick={() => scrollTo('stocks')}
-              className="bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm hover:scale-105 transition-all flex items-center gap-2 shadow-xl"
+              className="bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-xl hover:scale-105 hover:bg-red-800"
               style={{ boxShadow: '0 8px 24px rgba(157,2,8,.3)' }}
             >
               <i className="fa-solid fa-droplet text-xs" />
@@ -127,7 +119,7 @@ const Hero = () => {
             </button>
             <button
               onClick={() => scrollTo('devenir-donneur')}
-              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold text-sm hover:bg-white/20 transition-all flex items-center gap-2"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold text-sm hover:bg-white/20 hover:scale-105 transition-all flex items-center gap-2"
             >
               <i className="fa-solid fa-heart-pulse text-xs" />
               Devenir donneur

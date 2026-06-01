@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+
+// 🔥 CONFIGURATION AOS POUR LES ANIMATIONS
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const LoginModal = ({
   isOpen,
@@ -7,20 +11,26 @@ const LoginModal = ({
   setLoginData,
   handleLogin,
 }) => {
-  const [animate, setAnimate] = useState(false);
-
-  // Gérer uniquement le déclenchement de l'animation d'apparition
+  // Fermer avec Escape + bloquer le scroll body
   useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
     if (isOpen) {
-      // Un micro-délai pour s'assurer que le DOM a injecté la modale avant de lancer la transition
-      const timer = setTimeout(() => setAnimate(true), 20);
+      document.addEventListener('keydown', onKey);
       document.body.style.overflow = 'hidden';
-      return () => clearTimeout(timer);
+      // Force AOS à rafraîchir ses positions dès l'ouverture de la modal
+      setTimeout(() => {
+        AOS.refresh();
+      }, 50);
     } else {
-      setAnimate(false);
       document.body.style.overflow = 'auto';
     }
-  }, [isOpen]);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -37,29 +47,25 @@ const LoginModal = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
 
-      {/* ── Overlay ── */}
-      {/* Animation fluide de l'opacité à l'apparition */}
+      {/* ── Overlay arrière-plan ── */}
+      {/* Animation d'estompement progressif au chargement */}
       <div
-        className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-out ${
-          animate ? 'opacity-100' : 'opacity-0'
-        }`}
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
         onClick={onClose}
       />
 
       {/* ── Modal box ── */}
-      {/* Animation fluide combinée de l'opacité, de l'échelle (scale) et d'une légère montée (translate-y) */}
+      {/* 🔥 Animation zoom-in contrôlée pour une ouverture moderne et fluide */}
       <div 
-        className={`relative w-full max-w-md bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-8 border border-white/10 shadow-2xl z-10 transition-all duration-300 ease-out ${
-          animate 
-            ? 'opacity-100 scale-100 translate-y-0' 
-            : 'opacity-0 scale-95 translate-y-4'
-        }`}
+        className="relative w-full max-w-md bg-slate-900/95 backdrop-blur-3xl rounded-3xl p-8 border border-white/10 shadow-2xl z-10"
+        data-aos="zoom-in"
+        data-aos-duration="300"
       >
 
         {/* Bouton fermer */}
         <button
           onClick={onClose}
-          className="absolute right-6 top-6 w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-red-500/20 hover:border-red-500/30 transition"
+          className="absolute right-6 top-6 w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-red-500/20 hover:border-red-500/30 transition"
         >
           <i className="fa-solid fa-xmark text-sm" />
         </button>
@@ -116,7 +122,7 @@ const LoginModal = ({
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-red-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[.15em] hover:bg-red-800 transition-all shadow-xl shadow-red-900/20 flex items-center justify-center gap-2"
+            className="w-full bg-red-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[.15em] hover:bg-red-800 hover:scale-[1.01] transition-all shadow-xl shadow-red-900/20 flex items-center justify-center gap-2 mt-2"
           >
             <i className="fa-solid fa-arrow-right-to-bracket" />
             Se connecter

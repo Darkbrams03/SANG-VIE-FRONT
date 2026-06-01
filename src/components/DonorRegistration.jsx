@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+// 🔥 CONFIGURATION AOS POUR LES ANIMATIONS
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -35,12 +33,6 @@ const DonorRegistration = ({
   handleSubmit,
   isSubmitted,
 }) => {
-  
-  // S'assurer que le positionnement d'AOS reste précis lors du rendu du composant
-  useEffect(() => {
-    AOS.refresh();
-  }, [isSubmitted]);
-
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -58,7 +50,7 @@ const DonorRegistration = ({
       className="w-full py-20 relative overflow-hidden"
       style={{ background: '#9d0208' }}
     >
-      {/* Décors ambients */}
+      {/* Décors ambiants */}
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-black/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -66,7 +58,7 @@ const DonorRegistration = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* ── Texte gauche ── */}
-          {/* 🔥 Glissement depuis la gauche pour le bloc textuel explicatif */}
+          {/* 🔥 Glissement depuis la gauche pour le titre et les atouts */}
           <div className="text-white space-y-6" data-aos="fade-right">
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-red-200">
               Rejoindre le réseau
@@ -107,12 +99,12 @@ const DonorRegistration = ({
             </div>
           </div>
 
-          {/* ── Formulaire ou bloc succès ── */}
-          {/* 🔥 Glissement depuis la droite avec un léger retard pour équilibrer la mise en page */}
+          {/* ── Formulaire ── */}
+          {/* 🔥 Glissement depuis la droite avec un léger délai pour équilibrer le visuel */}
           <div 
-            data-aos="fade-left"
-            data-aos-delay="200"
             className="bg-white/10 backdrop-blur-3xl rounded-3xl p-8 border border-white/20 shadow-2xl"
+            data-aos="fade-left"
+            data-aos-delay="150"
           >
             {!isSubmitted ? (
               <>
@@ -206,7 +198,7 @@ const DonorRegistration = ({
               </>
             ) : (
               /* ── Message succès ── */
-              <div className="text-center py-8">
+              <div className="text-center py-8 animate-fade-in">
                 <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/30">
                   <i className="fa-solid fa-check text-white text-2xl" />
                 </div>

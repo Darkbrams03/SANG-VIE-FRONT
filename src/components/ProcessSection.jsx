@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-// 🔥 IMPORTATION DE AOS POUR LES ANIMATIONS AU SCROLL
+// 🔥 CONFIGURATION AOS POUR LES ANIMATIONS
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -31,19 +29,13 @@ const STEPS = [
 ];
 
 const ProcessSection = () => {
-  
-  // Garantir que les coordonnées d'AOS sont recalculées si nécessaire au chargement du composant
-  useEffect(() => {
-    AOS.refresh();
-  }, []);
-
   return (
-    <section id="comment-donner" className="bg-slate-900 py-20 text-white">
+    <section id="comment-donner" className="bg-slate-900 py-20 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Header ── */}
-        {/* 🔥 Glissement vers le haut de l'en-tête */}
-        <div className="mb-14" data-aos="fade-up">
+        {/* 🔥 Apparition latérale pour l'introduction */}
+        <div className="mb-14" data-aos="fade-right">
           <p className="text-[10px] font-black uppercase tracking-[.2em] text-red-400 mb-3">
             Processus de don
           </p>
@@ -51,10 +43,9 @@ const ProcessSection = () => {
             className="text-3xl md:text-4xl font-black uppercase tracking-tight"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
-            Comment devenir un{' '}
-            <span className="text-red-500">héros</span> ?
+            Comment devenir un <span className="text-red-500">héros</span> ?
           </h2>
-          <p className="mt-3 text-slate-400 max-w-xl text-sm">
+          <p className="mt-3 text-slate-400 max-w-xl text-sm font-light">
             Le don de sang au CNHU-HKM est simple, sécurisé et dure environ
             40 minutes. Un acte qui peut sauver jusqu'à 3 vies.
           </p>
@@ -63,12 +54,11 @@ const ProcessSection = () => {
         {/* ── Steps ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {STEPS.map(({ num, icon, title, desc }, index) => (
-            // 🔥 Chaque étape glisse depuis la gauche avec un retard cumulé (0ms, 200ms, 400ms) pour l'effet chronologique
             <div 
               key={num} 
               className="relative pt-8 group"
-              data-aos="fade-right"
-              data-aos-delay={index * 200}
+              data-aos="fade-up"
+              data-aos-delay={index * 100} // Émergence séquentielle (0ms, 100ms, 200ms)
             >
               {/* Numéro décoratif */}
               <span
@@ -79,38 +69,38 @@ const ProcessSection = () => {
               </span>
 
               {/* Icône */}
-              <div className="relative w-12 h-12 bg-red-700/20 rounded-2xl flex items-center justify-center mb-4">
+              <div className="relative w-12 h-12 bg-red-700/20 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
                 <i className={`fa-solid ${icon} text-red-400 text-lg`} />
               </div>
 
               {/* Texte */}
               <div className="relative">
                 <h4 className="font-bold text-lg mb-3">{title}</h4>
-                <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
+                <p className="text-slate-400 text-sm leading-relaxed font-light">{desc}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* ── CTA Banner ── */}
-        {/* 🔥 Le bandeau final surgit avec un zoom fluide dès que le reste est apparu */}
+        {/* 🔥 Surgissement depuis le bas pour clore la section en beauté */}
         <div 
           className="mt-16 p-px rounded-3xl" 
           style={{ background: 'linear-gradient(to right, #9d0208, #f97316)' }}
-          data-aos="zoom-in"
-          data-aos-delay="600"
+          data-aos="fade-up"
+          data-aos-delay="150"
         >
           <div className="bg-slate-900 rounded-[calc(1.5rem-1px)] p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="font-bold text-xl">Prêt à faire la différence ?</h3>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-slate-400 text-sm mt-1 font-light">
                 Vérifiez votre éligibilité en 2 minutes et inscrivez-vous.
               </p>
             </div>
             <div className="flex gap-3 shrink-0 flex-wrap justify-center">
               <button
                 onClick={() => scrollTo('devenir-donneur')}
-                className="bg-red-700 hover:bg-red-800 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-red-900/20 flex items-center gap-2"
+                className="bg-red-700 hover:bg-red-800 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-red-900/20 flex items-center gap-2 hover:scale-[1.02]"
               >
                 <i className="fa-solid fa-heart-pulse text-xs" />
                 Prendre rendez-vous

@@ -334,14 +334,19 @@ const AdminDash = () => {
   };
 
   /* ── fetch ── */
-  const fetchStats = async () => {
-    setLoading(p => ({ ...p, stats: true }));
-    try {
-      const r = await api.get('/admin/stats-globales', authHeader());
-      setStats(r.data);
-    } catch { notify('Erreur lors du chargement des stats.', 'error'); }
-    finally { setLoading(p => ({ ...p, stats: false })); }
-  };
+ const fetchStats = async () => {
+  setLoading(prev => ({ ...prev, stats: true }));
+  try {
+    // On appelle la nouvelle route publique
+    const res = await axios.get('http://127.0.0.1:8000/api/stats-globales');
+    setStats(res.data); 
+  } catch (err) {
+    console.error("Erreur stats:", err);
+  } finally {
+    setLoading(prev => ({ ...prev, stats: false }));
+  }
+};
+
 
   const fetchDonors = async () => {
     setLoading(p => ({ ...p, donors: true }));
@@ -438,12 +443,14 @@ const AdminDash = () => {
 
   /* ── blood group status — normalisé ── */
   const bloodStatus = (g) => {
-    const count = stats?.stocks_par_groupe?.[toApiKey(g)] ?? 10;
-    if (count < 5)  return { status:'crit', badge: String(count).padStart(2,'0') };
-    if (count < 15) return { status:'warn', badge: null };
-    return { status:'ok', badge: null };
-  };
+  // On nettoie le groupe (ex: "O−" devient "O-") pour correspondre au JSON Laravel
+  const cleanGroup = g.replace('−', '-'); 
+  const count = stats?.stocks_par_groupe?.[cleanGroup] ?? 0; // 0 par défaut si pas trouvé
 
+  if (count < 5)  return { status: 'crit', badge: String(count).padStart(2, '0') };
+  if (count < 15) return { status: 'warn', badge: String(count).padStart(2, '0') };
+  return { status: 'ok', badge: String(count).padStart(2, '0') };
+};
   /* ── section meta ── */
   const sectionMeta = {
     'vue-globale':  { title:'Vue Globale',        sub:'Tableau de bord · CNHU-HKM Cotonou' },
@@ -465,7 +472,7 @@ const AdminDash = () => {
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2)
     : 'AG';
 
-  /* ─────────────────────────────────────────────────────────── */
+
   return (
     <>
       <style>{CSS}</style>

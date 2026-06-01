@@ -16,7 +16,6 @@ import LoginModal from '../components/LoginModal';
 import Footer from '../components/Footer';
 import UrgencyBanner from '../components/UrgencyBanner';
 
-
 const API = 'https://sang-vie-back-rfmj.onrender.com/api';
 
 const Home = () => {
@@ -38,7 +37,7 @@ const Home = () => {
     password:  '',
   });
 
-
+  // 2. INITIALISATION DE AOS (Déclenchement au Scroll)
   useEffect(() => {
     AOS.init({
       duration: 1000,      // Durée de l'animation en millisecondes (1 seconde)
@@ -47,13 +46,6 @@ const Home = () => {
       offset: 120,         // Déclenche l'animation 120px avant que l'élément n'apparaisse à l'écran
       easing: 'ease-out-cubic', // Transition fluide
     });
-  }, []);
-
-  // ── Alerte active ──
-  useEffect(() => {
-    axios.get(`${API}/current-alert`)
-      .then(res => { if (res.data?.is_active) setActiveAlert(res.data); })
-      .catch(() => {});
   }, []);
 
   // ── Alerte active ──
@@ -108,7 +100,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-white">
 
       <Navbar onOpenLogin={() => setIsModalOpen(true)} />
 
@@ -124,18 +116,13 @@ const Home = () => {
       <div data-aos="fade-up">
         <StatsSection />
       </div>
-     
 
-    
-        <BloodStocks />
-     
-
-
-     <div data-aos="fade-left">
-        <BloodCenters />
-      </div>
+      <BloodStocks />
 
       
+        <BloodCenters />
+      
+
       <ProcessSection />
 
       <DonorRegistration
