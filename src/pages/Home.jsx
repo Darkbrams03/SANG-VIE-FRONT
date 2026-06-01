@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import StatsSection from '../components/StatsSection';
@@ -34,6 +37,24 @@ const Home = () => {
     matricule: '',
     password:  '',
   });
+
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,      // Durée de l'animation en millisecondes (1 seconde)
+      once: false,         // Mettre à true si tu veux que l'animation ne se joue QU'UNE seule fois. Si false, elle se rejoue à chaque scroll haut/bas.
+      mirror: false,       // Évite que les éléments s'animent à l'envers en remontant
+      offset: 120,         // Déclenche l'animation 120px avant que l'élément n'apparaisse à l'écran
+      easing: 'ease-out-cubic', // Transition fluide
+    });
+  }, []);
+
+  // ── Alerte active ──
+  useEffect(() => {
+    axios.get(`${API}/current-alert`)
+      .then(res => { if (res.data?.is_active) setActiveAlert(res.data); })
+      .catch(() => {});
+  }, []);
 
   // ── Alerte active ──
   useEffect(() => {
@@ -87,7 +108,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-white">
+    <div className="relative min-h-screen bg-white overflow-x-hidden">
 
       <Navbar onOpenLogin={() => setIsModalOpen(true)} />
 
@@ -100,9 +121,21 @@ const Home = () => {
         </div>
       </div>
 
-      <StatsSection />
-      <BloodStocks />
-      <BloodCenters />
+      <div data-aos="fade-up">
+        <StatsSection />
+      </div>
+     
+
+    
+        <BloodStocks />
+     
+
+
+     <div data-aos="fade-left">
+        <BloodCenters />
+      </div>
+
+      
       <ProcessSection />
 
       <DonorRegistration
