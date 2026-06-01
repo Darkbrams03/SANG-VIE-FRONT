@@ -54,12 +54,12 @@ const Navbar = ({ onOpenLogin }) => {
             {/* ── Nav desktop ── */}
             <div className="hidden md:flex items-center gap-7">
               {[
-                { label: 'Stocks',          id: 'stocks' },
-                { label: 'Le CNHU',         id: 'cnhu' },
+                { label: 'Stocks',       id: 'stocks' },
+                { label: 'Le CNHU',      id: 'cnhu' },
                 { label: 'Devenir donneur', id: 'comment-donner' },
               ].map(({ label, id }) => (
                 <button
-                  key={id}
+                  key={`desktop-${id}`}
                   onClick={() => handleNavClick(id)}
                   className="text-sm font-bold text-gray-600 hover:text-red-700 transition relative group"
                 >
@@ -68,7 +68,6 @@ const Navbar = ({ onOpenLogin }) => {
                 </button>
               ))}
 
-              {/* Urgences avec point animé */}
               <button
                 onClick={() => handleNavClick('stocks')}
                 className="text-sm font-bold text-gray-600 hover:text-red-700 transition flex items-center gap-1.5 relative group"
@@ -118,17 +117,15 @@ const Navbar = ({ onOpenLogin }) => {
         >
           <div className="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden">
             <div className="p-5 space-y-2">
-
-              {/* Liens mobile */}
               {[
-                { label: 'Stocks de sang',  id: 'stocks',            icon: 'fa-droplet' },
-                { label: 'Le CNHU-HKM',     id: 'cnhu',              icon: 'fa-hospital' },
-                { label: 'Comment donner',  id: 'comment-donner',    icon: 'fa-heart-pulse' },
-                { label: 'Urgences',        id: 'stocks',  icon: 'fa-truck-medical', urgent: true },
+                { label: 'Stocks de sang',  id: 'stocks-mobile',        icon: 'fa-droplet' },
+                { label: 'Le CNHU-HKM',     id: 'cnhu-mobile',          icon: 'fa-hospital' },
+                { label: 'Comment donner',  id: 'comment-donner-mobile',icon: 'fa-heart-pulse' },
+                { label: 'Urgences',        id: 'stocks-urgences',      icon: 'fa-truck-medical', urgent: true },
               ].map(({ label, id, icon, urgent }) => (
                 <button
-                  key={id}
-                  onClick={() => handleNavClick(id)}
+                  key={`mobile-${id}`}
+                  onClick={() => handleNavClick(id.replace('-mobile', '').replace('-urgences', 'stocks'))}
                   className={`w-full flex items-center gap-3 p-3.5 rounded-xl hover:bg-red-50 transition group text-left ${
                     urgent ? 'text-red-600' : ''
                   }`}
@@ -148,7 +145,6 @@ const Navbar = ({ onOpenLogin }) => {
 
               <hr className="border-gray-100 my-1" />
 
-              {/* CTAs mobile */}
               <button
                 onClick={() => handleNavClick('devenir-donneur')}
                 className="w-full py-3.5 bg-red-700 text-white rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2"

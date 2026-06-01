@@ -16,7 +16,7 @@ import LoginModal from '../components/LoginModal';
 import Footer from '../components/Footer';
 import UrgencyBanner from '../components/UrgencyBanner';
 
-const API = 'https://sang-vie-back-rfmj.onrender.com/api';
+const API = 'https://sang-vie-back.onrender.com/api';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -74,24 +74,24 @@ const Home = () => {
   };
 
   // ── Connexion agent ──
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${API}/login`, {
-        matricule: loginData.matricule,
-        password:  loginData.password,
-      });
-
-      if (res.data.token) {
-        localStorage.setItem('ACCESS_TOKEN', res.data.token);
-        localStorage.setItem('USER_DATA', JSON.stringify(res.data.user));
-        setIsModalOpen(false);
-        navigate(res.data.user.role === 'admin' ? '/admin' : '/agent');
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || "Identifiants invalides.");
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post('https://sang-vie-back.onrender.com/api/login', loginData);
+    // Succès
+    localStorage.setItem('token', response.data.token);
+    window.location.reload(); // Ou rediriger vers le dashboard
+  } catch (error) {
+    // 🔥 C'est ici que tu dois voir l'erreur !
+    console.error("Erreur de connexion :", error.response?.data);
+    
+    if (error.response?.status === 401) {
+      alert("Matricule ou mot de passe incorrect."); 
+    } else {
+      alert("Une erreur serveur est survenue. Vérifie ta connexion.");
     }
-  };
+  }
+};
 
   // Scroll vers la section don
 

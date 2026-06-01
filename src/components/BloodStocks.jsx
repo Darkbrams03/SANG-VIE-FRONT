@@ -5,7 +5,7 @@ import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const API = 'https://sang-vie-back-rfmj.onrender.com/api';
+const API = 'https://sang-vie-back.onrender.com/api';
 
 const scrollTo = (id) => {
   const el = document.getElementById(id);

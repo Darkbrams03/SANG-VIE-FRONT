@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API = 'https://sang-vie-back-rfmj.onrender.com/api';
+const API = 'https://sang-vie-back.onrender.com/api';
 
 const StatsSection = () => {
   const [stats, setStats] = useState(null);
