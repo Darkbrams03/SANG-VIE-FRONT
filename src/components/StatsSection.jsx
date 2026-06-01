@@ -6,11 +6,14 @@ const API = 'https://sang-vie-back.onrender.com/api';
 const StatsSection = () => {
   const [stats, setStats] = useState(null);
 
-  useEffect(() => {
-    axios.get(`${API}/stats-globales`)
-      .then(res => setStats(res.data))
-      .catch(() => {}); // silencieux si API indispo
-  }, []);
+ useEffect(() => {
+  axios.get(`${API}/stats-globales`)
+    .then(res => {
+      console.log("DEBUG API - Structure reçue :", res.data); // Ouvre la console F12 !
+      setStats(res.data);
+    })
+    .catch(err => console.error("Erreur API :", err));
+}, []);
 
  // 1. Récupère le vrai compteur envoyé par le contrôleur
 const groupesCritiques = stats?.groupes_critiques_count ?? 0; 
