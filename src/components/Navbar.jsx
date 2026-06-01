@@ -124,7 +124,7 @@ const Navbar = ({ onOpenLogin }) => {
                 { label: 'Stocks de sang',  id: 'stocks',            icon: 'fa-droplet' },
                 { label: 'Le CNHU-HKM',     id: 'cnhu',              icon: 'fa-hospital' },
                 { label: 'Comment donner',  id: 'comment-donner',    icon: 'fa-heart-pulse' },
-                { label: 'Urgences',        id: 'urgences-section',  icon: 'fa-truck-medical', urgent: true },
+                { label: 'Urgences',        id: 'devenir-donneur',  icon: 'fa-truck-medical', urgent: true },
               ].map(({ label, id, icon, urgent }) => (
                 <button
                   key={id}
