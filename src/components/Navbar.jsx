@@ -70,7 +70,7 @@ const Navbar = ({ onOpenLogin }) => {
 
               {/* Urgences avec point animé */}
               <button
-                onClick={() => handleNavClick('urgences-section')}
+                onClick={() => handleNavClick('stocks')}
                 className="text-sm font-bold text-gray-600 hover:text-red-700 transition flex items-center gap-1.5 relative group"
               >
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />

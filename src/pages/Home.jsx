@@ -94,10 +94,17 @@ const Home = () => {
   };
 
   // Scroll vers la section don
-  const scrollToDon = () => {
-    document.getElementById('devenir-donneur')
-      ?.scrollIntoView({ behavior: 'smooth' });
-  };
+
+const scrollToDon = () => {
+  const el = document.getElementById('devenir-donneur');
+  if (el) {
+    const targetPosition = el.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth'
+    });
+  }
+};
 
   return (
     <div className="relative min-h-screen bg-white">
