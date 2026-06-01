@@ -14,15 +14,20 @@ const StatsSection = () => {
     })
     .catch(err => console.error("Erreur API :", err));
 }, []);
-// 1. Récupère le compteur des groupes critiques (map de urgences_actives)
-const groupesCritiques = stats?.urgences_actives ?? 0; 
 
-// 2. Récupère les totaux
-const totalPoches      = stats?.total_poches     ?? 0;
 
-// 3. Récupère les donneurs actifs (map de entrees_24h, en attendant le champ total_donneurs)
-const totalDonneurs    = stats?.entrees_24h      ?? 0;
+// 1. Total poches (ce qui fonctionnait déjà)
+  const totalPoches = stats?.total_poches ?? 0;
+  
+  // 2. DONNEURS : Si la clé n'existe pas, utilise une valeur par défaut ou une autre clé
+  const totalDonneurs = stats?.total_donneurs ?? stats?.entrees_24h ?? 0;
 
+  // 3. RECALCUL DU NOMBRE DE GROUPES CRITIQUES
+  // Si tu as bien 'stocks_par_groupe' dans tes données, on compte nous-mêmes ceux <= 4
+  const stocksGroupes = stats?.stocks_par_groupe || {};
+  const groupesCritiques = Object.values(stocksGroupes).filter(val => val <= 4).length;
+
+  
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
