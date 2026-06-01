@@ -77,19 +77,21 @@ const Home = () => {
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const response = await axios.post('https://sang-vie-back.onrender.com/api/login', loginData);
-    // Succès
-    localStorage.setItem('token', response.data.token);
-    window.location.reload(); // Ou rediriger vers le dashboard
-  } catch (error) {
-    // 🔥 C'est ici que tu dois voir l'erreur !
-    console.error("Erreur de connexion :", error.response?.data);
+    const response = await axios.post(`${API}/login`, loginData);
     
-    if (error.response?.status === 401) {
-      alert("Matricule ou mot de passe incorrect."); 
-    } else {
-      alert("Une erreur serveur est survenue. Vérifie ta connexion.");
-    }
+    // 1. Sauvegarde le token
+    localStorage.setItem('token', response.data.token);
+    
+    // 2. Redirige vers le dashboard selon le rôle (si ton API renvoie le rôle)
+    // Sinon, envoie simplement vers /dashboard
+    navigate('/dashboard'); 
+    
+    // Optionnel : ferme la modal
+    setIsModalOpen(false);
+    
+  } catch (error) {
+    console.error("Erreur :", error.response?.data);
+    alert("Matricule ou mot de passe incorrect.");
   }
 };
 
