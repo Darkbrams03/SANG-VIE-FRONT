@@ -491,15 +491,7 @@ const handlePublishAlert = async () => {
     : 'AG';
 
 
-    const downloadPoster = () => {
-  if (!posterRef.current) return;
-  html2canvas(posterRef.current).then(canvas => {
-    const a = document.createElement('a');
-    a.download = `ALERTE-SANG-${alertCfg.groupe.split(' ')[0]}.png`;
-    a.href = canvas.toDataURL();
-    a.click();
-  });
-};
+
 
   return (
     <>
