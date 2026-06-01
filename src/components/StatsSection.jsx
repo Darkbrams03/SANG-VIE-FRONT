@@ -14,13 +14,14 @@ const StatsSection = () => {
     })
     .catch(err => console.error("Erreur API :", err));
 }, []);
-
- // 1. Récupère le vrai compteur envoyé par le contrôleur
-const groupesCritiques = stats?.groupes_critiques_count ?? 0; 
+// 1. Récupère le compteur des groupes critiques (map de urgences_actives)
+const groupesCritiques = stats?.urgences_actives ?? 0; 
 
 // 2. Récupère les totaux
-const totalPoches   = stats?.total_poches   ?? 0;
-const totalDonneurs = stats?.total_donneurs ?? 0;
+const totalPoches      = stats?.total_poches     ?? 0;
+
+// 3. Récupère les donneurs actifs (map de entrees_24h, en attendant le champ total_donneurs)
+const totalDonneurs    = stats?.entrees_24h      ?? 0;
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
