@@ -10,8 +10,9 @@ const SERVICES      = ['Urgences & Réanimation','Maternité — Gynécologie','
 const MOTIFS_REBUT  = ['Péremption dépassée','Poche percée / accident','Test sérologique positif','Problème de conservation','Autre'];
 
 const authHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}` }
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
 });
+
 
 /* ─── helpers UI ─── */
 const cellCls    = { ok:'bg-emerald-500/[.08] border border-emerald-500/20', warn:'bg-amber-500/[.08] border border-amber-500/20', crit:'bg-red-500/[.10] border-2 border-red-500/40' };

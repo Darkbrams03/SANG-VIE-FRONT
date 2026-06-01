@@ -326,7 +326,7 @@ const AdminDash = () => {
   /* ── helpers ── */
   const token      = () => localStorage.getItem('ACCESS_TOKEN');
   const authHeader = () => ({ headers: { Authorization: `Bearer ${token()}` } });
-  const api        = axios.create({ baseURL: 'http://127.0.0.1:8000/api' });
+ const api = axios.create({ baseURL: 'https://sang-vie-back.onrender.com/api' });
 
   const notify = (message, type = 'success') => {
     setNotif({ show: true, message, type });
@@ -338,7 +338,7 @@ const AdminDash = () => {
   setLoading(prev => ({ ...prev, stats: true }));
   try {
     // On appelle la nouvelle route publique
-    const res = await axios.get('http://127.0.0.1:8000/api/stats-globales');
+    const res = await axios.get('https://sang-vie-back.onrender.com/api/stats-globales');
     setStats(res.data); 
   } catch (err) {
     console.error("Erreur stats:", err);
