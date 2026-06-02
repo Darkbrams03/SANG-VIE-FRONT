@@ -16,14 +16,12 @@ const StatsSection = () => {
 }, []);
 
 
-// 1. Total poches (ce qui fonctionnait déjà)
+//
   const totalPoches = stats?.total_poches ?? 0;
   
-  // 2. DONNEURS : Si la clé n'existe pas, utilise une valeur par défaut ou une autre clé
   const totalDonneurs = stats?.total_donneurs ?? stats?.entrees_24h ?? 0;
 
-  // 3. RECALCUL DU NOMBRE DE GROUPES CRITIQUES
-  // Si tu as bien 'stocks_par_groupe' dans tes données, on compte nous-mêmes ceux <= 4
+  
   const stocksGroupes = stats?.stocks_par_groupe || {};
   const groupesCritiques = Object.values(stocksGroupes).filter(val => val <= 4).length;
 
@@ -99,25 +97,23 @@ const StatsSection = () => {
           </div>
 
           {/* Donneurs */}
-          <div className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all">
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">
-                Donneurs actifs
-              </span>
-              <h3 className="text-3xl font-black text-slate-800 mt-1">
-                {typeof totalDonneurs === 'number'
-                  ? `${totalDonneurs.toLocaleString('fr-FR')}+`
-                  : totalDonneurs}
-              </h3>
-              <p className="text-sm text-slate-500">Héros enregistrés au Bénin</p>
-            </div>
-            <div className="mt-4 flex -space-x-2">
-              {['bg-slate-200','bg-slate-300','bg-slate-400'].map((c,i) => (
-                <div key={i} className={`w-8 h-8 rounded-full ${c} border-2 border-white`} />
-              ))}
-              <div className="w-8 h-8 rounded-full bg-red-700 border-2 border-white flex items-center justify-center text-[9px] text-white font-black">+</div>
+        <div className="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between border border-gray-100 hover:border-red-200 transition-all">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">
+              Donneurs actifs
+            </span>
+            <h3 className="text-3xl font-black text-slate-800 mt-1">
+              {stats?.total_donneurs?.toLocaleString('fr-FR') ?? 0}
+            </h3>
+            <p className="text-sm text-slate-500">Héros enregistrés au Bénin</p>
+          </div>
+          <div className="mt-4 flex -space-x-2">
+            {/* Petit rappel visuel */}
+            <div className="w-8 h-8 rounded-full bg-red-700 border-2 border-white flex items-center justify-center text-[9px] text-white font-black">
+              {stats?.total_donneurs ?? 0}
             </div>
           </div>
+        </div>
 
         </div>
       </div>
